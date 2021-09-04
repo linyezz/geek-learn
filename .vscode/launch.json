@@ -11,7 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}\\第一周浏览器工作原理\\class4.js"
+      "program": "${workspaceFolder}\\第一周浏览器工作原理\\clint.js"
     }
   ]
 }

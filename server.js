@@ -6,11 +6,13 @@ http.createServer((request,response)=>{
     console.error(error)
   }).on('data',(chunk)=>{
     body.push(chunk.toString());
+    // body.push(chunk);
   }).on('end',()=>{
-    body = Buffer.concat(body).toString();
+    // body = Buffer.concat(body).toString();
+    body = (Buffer.concat([Buffer.from(body.toString())])).toString();
     console.log(body);
     response.writeHead(200,{'Content-Type':'text/html'});
-    response.end('Hello Word\n')
+    response.end(' Hello Word\n')
   })
 }).listen(8088);
 
