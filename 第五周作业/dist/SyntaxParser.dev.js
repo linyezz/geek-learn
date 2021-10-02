@@ -210,7 +210,7 @@ function evaluate(node) {
 } ////////////////////////
 
 
-var source = "\nlet a ;\nvar b ;\nconst c ;\nfunction d (){}\n";
+var source = "\nlet a ;\nvar b ;\nconst c ;\n";
 var tree = parse(source);
 console.log(tree); // evaluate(tree);
 

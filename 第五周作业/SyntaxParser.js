@@ -176,7 +176,6 @@ let source = `
 let a ;
 var b ;
 const c ;
-function d (){}
 `;
 let tree = parse(source);
 console.log(tree)
