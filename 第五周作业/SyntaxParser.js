@@ -77,12 +77,14 @@ function closure(state) {
         let symbol = quene.shift();
         if (syntax[symbol]) {
             for (let rule of syntax[symbol]) {
-                if (!state[rule[0]])
+                if (!state[rule[0]]){
                     quene.push(rule[0]);
+                  }
                 let current = state;
                 for (let part of rule) {
-                    if (!current[part])
-                        current[part] = {};
+                    if (!current[part]){
+                      current[part] = {};
+                    }   
                     current = current[part];
                 }
                 current.$reduceType = symbol;
@@ -174,6 +176,7 @@ let source = `
 let a ;
 var b ;
 const c ;
+function d (){}
 `;
 let tree = parse(source);
 console.log(tree)

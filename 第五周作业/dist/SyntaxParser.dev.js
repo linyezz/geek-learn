@@ -48,7 +48,11 @@ function closure(state) {
       try {
         for (var _iterator = syntax[_symbol][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var rule = _step.value;
-          if (!state[rule[0]]) quene.push(rule[0]);
+
+          if (!state[rule[0]]) {
+            quene.push(rule[0]);
+          }
+
           var current = state;
           var _iteratorNormalCompletion2 = true;
           var _didIteratorError2 = false;
@@ -57,7 +61,11 @@ function closure(state) {
           try {
             for (var _iterator2 = rule[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
               var part = _step2.value;
-              if (!current[part]) current[part] = {};
+
+              if (!current[part]) {
+                current[part] = {};
+              }
+
               current = current[part];
             }
           } catch (err) {
@@ -202,7 +210,7 @@ function evaluate(node) {
 } ////////////////////////
 
 
-var source = "\nlet a ;\nvar b ;\nconst c ;\n";
+var source = "\nlet a ;\nvar b ;\nconst c ;\nfunction d (){}\n";
 var tree = parse(source);
 console.log(tree); // evaluate(tree);
 
