@@ -1,5 +1,10 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.parse = parse;
+
 var _LexParser = require("./LexParser.js");
 
 // 定义
@@ -7,15 +12,27 @@ var syntax = {
   Program: [['StatementList', 'EOF']],
   StatementList: [['Statement'], ['StatementList', 'Statement']],
   Statement: [['ExpressionStatement'], ['IfStatement'], ['VariableDecaration'], ['FunctionDecaration']],
-  ExpressionStatement: [['Expression', ':']],
-  Expression: [['AddtiveExpression']],
+  ExpressionStatement: [['Expression', ';']],
+  Expression: [["AssignmentExpression"]],
+  AssignmentExpression: [['LeftHandSideExpression', "=", "LogicalORExpression"], ['LogicalORExpression']],
+  LogicalORExpression: [["LogicalANDExpression"], ["LogicalORExpression", "||", "LogicalANDExpression"]],
+  LogicalANDExpression: [["AdditiveExpression"], ["LogicalANDExpression", "&&", "AdditiveExpression"]],
   IfStatement: [['if', '(', 'Expression', ')', 'Statement']],
   VariableDecaration: [['var', 'Identifier', ';'], ['let', 'Identifier', ';'], ['const', 'Identifier', ';']],
   FunctionDecaration: [['function', 'Identifier', '(', ')', '{', 'StatementList', '}']],
-  AddtiveExpression: [['MuliplicativeExpression'], ['AddtiveExpression', '+', 'MuliplicativeExpression'], ['AddtiveExpression', '-', 'MuliplicativeExpression']],
-  MuliplicativeExpression: [['PrimaryExpression'], ['MuliplicativeExpression', '*', 'PrimaryExpression'], ['MuliplicativeExpression', '/', 'PrimaryExpression']],
+  AdditiveExpression: [['MuliplicativeExpression'], ['AdditiveExpression', '+', 'MuliplicativeExpression'], ['AdditiveExpression', '-', 'MuliplicativeExpression']],
+  MuliplicativeExpression: [['LeftHandSideExpression'], ['MuliplicativeExpression', '*', 'LeftHandSideExpression'], ['MuliplicativeExpression', '/', 'LeftHandSideExpression']],
+  LeftHandSideExpression: [["CallExpression"], ["NewExpression"]],
+  CallExpression: [["MemberExpression", "Arguments"], ["CallExpression", "Arguments"]],
+  Arguments: [["(", ")"], ["(", "ArgumentList", ")"]],
+  ArgumentList: [["AssignmentExpression"], ["ArgumentList", ",", "AssignmentExpression"]],
+  NewExpression: [["MemberExpression"], ["new", "NewExpression"]],
+  MemberExpression: [["PrimaryExpression"], ["PrimaryExpression", ".", "Identifier"], ["PrimaryExpression", "[", "Expression", "]"]],
   PrimaryExpression: [['(', 'EXpression', ')'], ['Literial'], ['Identifier']],
-  Literial: [['Number'], ['String'], ['Boolean'], ['Null'], ['RegularExpression']]
+  Literial: [['NumbericLiteral'], ['StringLiteral'], ['BooleanLiteral'], ['NullLiteral'], ['RegularExpression'], ["ObjectLiteral"], ["ArrayLiteral"]],
+  ObjectLiteral: [["{", "}"], ["{", "PropertyList", "}"]],
+  PropertyList: [["Property"], ["PropertyList", ",", "Property"]],
+  Property: [["StringLiteral", ":", "AdditiveExpression"], ["Identifier", ":", "AdditiveExpression"]]
 };
 var end = {
   $isEnd: true
@@ -162,7 +179,8 @@ function parse(source) {
   try {
     for (var _iterator3 = (0, _LexParser.scan)(source)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
       var symbol = _step3.value;
-      // console.log(symbol)
+      console.log(symbol); // console.log(symbol)
+
       shift(symbol);
     }
   } catch (err) {
@@ -182,40 +200,3 @@ function parse(source) {
 
   return reduce();
 }
-
-var evaluator = {
-  Program: function Program(node) {
-    return evaluate(node.children[0]);
-  },
-  StatementList: function StatementList(node) {
-    if (node.children.length === 1) {
-      return evaluate(node.children[0]);
-    } else {
-      evaluate(node.children[0]);
-      return evaluate(node.children[1]);
-    }
-  },
-  Statement: function Statement(node) {
-    return evaluate(node.children[0]);
-  },
-  VariableDecaration: function VariableDecaration(node) {
-    console.log('declare variable ' + node.children[1].name);
-  },
-  EOF: function EOF() {
-    return null;
-  }
-};
-
-function evaluate(node) {
-  // console.log(node)
-  if (evaluator[node.type]) {
-    return evaluator[node.type](node);
-  }
-} ////////////////////////
-
-
-var source = "\nvar a;\nlet b;\n";
-var tree = parse(source);
-console.log(tree); // evaluate(tree);
-
-console.log(evaluate(tree));

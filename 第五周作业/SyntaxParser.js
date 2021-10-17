@@ -96,14 +96,15 @@ function closure(state) {
         if (symbol.match(/^\$/)) {
             continue;
         }
-        if (hash[JSON.stringify(state[symbol])])
+        if (hash[JSON.stringify(state[symbol])]){
             state[symbol] = hash[JSON.stringify(state[symbol])];
+          }
         else closure(state[symbol]);
     }
 }
 
 closure(start);
-
+console.log(start)
 function parse(source) {
     let stack = [start];
     let symbolStack = [];
@@ -136,6 +137,7 @@ function parse(source) {
         }
     }
     for (let symbol of scan(source)) {
+      // console.log(symbol)
         shift(symbol);
     }
     return reduce();
@@ -173,10 +175,10 @@ function evaluate(node) {
 
 ////////////////////////
 let source = `
-let a ;
-var b ;
-const c ;
+var a;
+let b;
 `;
+
 let tree = parse(source);
 console.log(tree)
 // evaluate(tree);
