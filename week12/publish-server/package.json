@@ -1,0 +1,15 @@
+{
+  "name": "publish-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "publish": "scp -r ./* root@139.196.113.146:home/linye/publish-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "unzipper": "^0.10.11"
+  }
+}
